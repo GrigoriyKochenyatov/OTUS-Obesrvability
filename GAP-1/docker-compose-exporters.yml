@@ -1,0 +1,46 @@
+---
+version: '3.8'
+
+networks:
+  front-tier:
+  back-tier:
+
+
+services:
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    networks:
+      - back-tier
+
+  blackbox_exporter:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: blackbox_exporter
+    volumes:
+      - ./blackbox/:/etc/blackbox/
+
+    command:
+      - '--config.file=/etc/blackbox/blackbox.yml'
+    restart: unless-stopped
+    networks:
+      - back-tier
+
+  mysqld_exporter:
+    image: quay.io/prometheus/mysqld-exporter:latest
+    container_name: mysqld_exporter
+    volumes:
+      - ./mysqld/:/etc/mysqld/
+    command:
+      - '--config.my-cnf=/etc/mysqld/mysqld.conf'
+    restart: unless-stopped
+    ports:
+      - "9104:9104"
+    networks:
+      - back-tier
+
