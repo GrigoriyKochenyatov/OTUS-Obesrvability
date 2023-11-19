@@ -1,0 +1,18 @@
+
+networks:
+#  front-tier:
+  back-tier:
+
+services:
+
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    volumes:
+      - ./victoria-metrics-data:/victoria-metrics-data
+    command:
+      - "--retentionPeriod=14d"
+    ports:
+      - 8428:8428
+    networks:
+      - back-tier
+    restart: always
