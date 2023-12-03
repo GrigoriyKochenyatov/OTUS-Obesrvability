@@ -1,0 +1,21 @@
+---
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  receiver: default-telegram
+  routes:
+    - match:
+        severity: critical
+      receiver: critical-telegram
+receivers:
+  - name: critical-telegram
+    telegram_configs:
+      - bot_token: 667********:********************E
+        api_url: https://api.telegram.org
+        chat_id: -10***********
+        parse_mode: ""
+  - name: default-telegram
+    telegram_configs:
+      - bot_token: 667*******:****************fE
+        api_url: https://api.telegram.org
+        chat_id: -100*********
+        parse_mode: ""
