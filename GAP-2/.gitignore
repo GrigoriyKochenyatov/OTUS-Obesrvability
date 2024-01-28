@@ -1,1 +1,3 @@
 /mysqld/*
+/victoria-metrics-data/*
+/grafana-data/*

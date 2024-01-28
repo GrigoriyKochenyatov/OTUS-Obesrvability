@@ -43,4 +43,18 @@ services:
       - "9104:9104"
     networks:
       - back-tier
-
+  php-fpm-exporter:
+#    image: drud/php-fpm-exporter:v0.25.5
+    image: hipages/php-fpm_exporter:latest
+    container_name: php-fpm-exporter
+    hostname: php-fpm-exporter
+    ports:
+      - 9253:9253
+    volumes:
+      - '/run/php/php8.2-fpm.sock:/tmp/php.sock'
+    command:
+      - '--log.level=info'
+#      - '--phpfpm.scrape-uri=tcp://192.168.56.104/status'
+      - '--phpfpm.scrape-uri=unix:///tmp/php.sock;/status'
+    networks:
+      - back-tier

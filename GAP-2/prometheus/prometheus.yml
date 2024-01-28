@@ -18,14 +18,14 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          # - alertmanager:9093
+           - alertmanager:9093
 
 
 
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  # - "first_rules.yml"
+  - "alert_rules.yml"
   # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
@@ -66,7 +66,7 @@ scrape_configs:
     static_configs:
       - targets:
         # All mysql hostnames or unix sockets to monitor.
-        - 192.168.3.58:3306
+        - 192.168.56.104:3306
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -75,3 +75,8 @@ scrape_configs:
       - target_label: __address__
         # The mysqld_exporter host:port
         replacement: mysqld_exporter:9104
+
+  - job_name: 'php-fpm'
+    static_configs:
+      - targets: ['php-fpm-exporter:9253']
+
