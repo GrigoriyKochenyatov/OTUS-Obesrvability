@@ -1,0 +1,25 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: system
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: otus-logs
+      __path__: /var/log/*log
+
+  pipeline_stages:
+    - regex:
+        expression: '(?P<timestamp>[a-zA-Z]{3} \d{2} \d{2}:\d{2}:\d{2}) (?P<loghost>[-a-z0-9]+) (?P<program>[-a-zA-Z/]+)\[(?P<pid>[0-9]+)\]: (?P<msg>[\s\S]*)'
+    - labels:
+        program:
+        loghost:
